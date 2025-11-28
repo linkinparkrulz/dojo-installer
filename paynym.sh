@@ -54,7 +54,7 @@ function fetch_payment_code() {
 # Function to update NODE_PAYMENT_CODE in config
 function update_payment_code() {
   local payment_code="$1"
-  local config_file="samourai-dojo-1.28.2/docker/my-dojo/conf/docker-node.conf"
+  local config_file="samourai-dojo/docker/my-dojo/conf/docker-node.conf"
   local config_dir=$(dirname "$config_file")
   
   # Create config directory if it doesn't exist
@@ -136,7 +136,7 @@ function setup_paynym_payment_code() {
 
 # Function to check if payment code is already configured
 function is_payment_code_configured() {
-  local config_file="samourai-dojo-1.28.2/docker/my-dojo/conf/docker-node.conf"
+  local config_file="samourai-dojo/docker/my-dojo/conf/docker-node.conf"
   
   if [[ -f "$config_file" ]]; then
     local payment_code=$(grep "^NODE_PAYMENT_CODE=" "$config_file" | cut -d'=' -f2)

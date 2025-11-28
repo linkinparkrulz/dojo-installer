@@ -30,8 +30,8 @@ function confirm_installation() {
 
 function install_dojo() {
   write_config_files
-  echo "changing dir to $(dirname "$0")/samourai-dojo-1.28.2/docker/my-dojo/"
-  cd "$(dirname "$0")/samourai-dojo-1.28.2/docker/my-dojo/" || exit 1
+  echo "changing dir to $(dirname "$0")/samourai-dojo/docker/my-dojo/"
+  cd "$(dirname "$0")/samourai-dojo/docker/my-dojo/" || exit 1
   
   if [ -f "dojo.sh" ] && [ -x "dojo.sh" ]; then
     msgbox "Installation Starting" "Dojo installation is now starting!\n\nYou will see many messages appear as Docker downloads and builds the containers.\n\nPlease wait until you see bitcoind synchronization logs, then you can press Ctrl+C to exit the installer.\n\nThe installation will continue running in the background."

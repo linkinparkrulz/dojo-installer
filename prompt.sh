@@ -8,6 +8,23 @@ GUARD_PROMPT_INCLUDED=1
 
 source "util.sh"
 
+# Dark theme color configuration for whiptail
+function setup_dark_theme() {
+  export NEWT_COLORS='
+  root=black,black
+  window=black,black
+  border=green,black
+  title=green,black
+  textbox=white,black
+  button=black,green
+  actbutton=green,black
+  listbox=white,black
+  actlistbox=black,green
+  sellistbox=green,black
+  actsellistbox=black,green
+  '
+}
+
 # TODO: Also have a function to adjust the array options. For example: add spaces to the beginning of the right-hand (description) strings
 function menubox() {
   local title=${1:-""}

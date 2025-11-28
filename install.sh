@@ -23,6 +23,9 @@ function check_whiptail() {
 function main() {
   check_whiptail
 
+  # Setup dark theme
+  setup_dark_theme
+
   # Show splash screen first
   show_splash
 

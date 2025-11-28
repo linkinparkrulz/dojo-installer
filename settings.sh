@@ -51,7 +51,7 @@ function get_feerate() {
 
 function write_config_files() {
   local base_dir
-  base_dir="$(dirname "$0")/dojo-app/docker/my-dojo"
+  base_dir="$(dirname "$0")/samourai-dojo-1.28.2/docker/my-dojo"
   local bitcoind_file="$base_dir/conf/docker-bitcoind.conf.tpl"
   local common_file="$base_dir/conf/docker-common.conf.tpl"
   local mysql_file="$base_dir/conf/docker-mysql.conf.tpl"
@@ -83,4 +83,3 @@ function write_config_files() {
   sed -i "/^INDEXER_TYPE=/c\INDEXER_TYPE=fulcrum" "$indexer_file"
   sed -i "/^INDEXER_BATCH_SUPPORT=/c\INDEXER_BATCH_SUPPORT=active" "$indexer_file"
 }
-

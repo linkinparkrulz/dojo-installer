@@ -9,17 +9,13 @@ GUARD_REVIEW_INCLUDED=1
 source "prompt.sh"
 source "dbcache.sh"
 source "network.sh"
-source "electrum.sh"
 source "settings.sh"
 
 function confirm_installation() {
-  local electrum
-  electrum=$(get_electrum)
-
   local msg_array=(
     "Dojo will be installed with the following settings:\n\n"
     "Network: $(get_network)\n"
-    "Electrum Server: ${electrum^}\n"
+    "Electrum Server: Fulcrum\n"
     "dbcache: $(get_dbcache) MiB\n"
     "Fee rate: 1 sat/vb\n"
     "\n"
@@ -34,11 +30,11 @@ function confirm_installation() {
 
 function install_dojo() {
   write_config_files
-  echo "changing dir to $(dirname "$0")/dojo-app/docker/my-dojo/"
-  cd "$(dirname "$0")/dojo-app/docker/my-dojo/" || exit 1
+  echo "changing dir to $(dirname "$0")/samourai-dojo-1.28.2/docker/my-dojo/"
+  cd "$(dirname "$0")/samourai-dojo-1.28.2/docker/my-dojo/" || exit 1
   
   if [ -f "dojo.sh" ] && [ -x "dojo.sh" ]; then
-    echo "TODO: Display a messagebox saying installation is starting, lots of messages will appear, wait until bitcoind logs etc, then Ctrl + C to exit"
+    msgbox "Installation Starting" "Dojo installation is now starting!\n\nYou will see many messages appear as Docker downloads and builds the containers.\n\nPlease wait until you see bitcoind synchronization logs, then you can press Ctrl+C to exit the installer.\n\nThe installation will continue running in the background."
     ./dojo.sh install
   fi
   

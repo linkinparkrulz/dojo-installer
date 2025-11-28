@@ -1,0 +1,29 @@
+services:
+  explorer:
+    image: "samouraiwallet/dojo-explorer:${DOJO_EXPLORER_VERSION_TAG}"
+    pull_policy: never
+    container_name: explorer
+    build:
+      context: ./explorer
+    env_file:
+      - ./.env
+      - ./conf/docker-bitcoind.conf
+      - ./conf/docker-node.conf
+      - ./conf/docker-indexer.conf
+      - ./conf/docker-explorer.conf
+    restart: always
+    command: /home/node/app/restart.sh
+    expose:
+      - "3002"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    networks:
+      dojonet:
+        ipv4_address: ${NET_DOJO_EXPLORER_IPV4}
+
+  node:
+    depends_on:
+      - explorer

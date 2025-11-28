@@ -6,64 +6,39 @@ fi
 
 GUARD_DBCACHE_INCLUDED=1
 
-source "system.sh"
-source "settings.sh"
 source "prompt.sh"
-source "util.sh"
+source "settings.sh"
 
-function input_dbcache() {
-  local default_ram=1024
-  local total_ram
-  total_ram=$(get_system_memory)
+function menu_dbcache() {
+  local current_dbcache
+  current_dbcache=$(get_dbcache)
+  
+  local msg="Current dbcache: ${current_dbcache} MiB\n\n"
+  msg+="Select dbcache size (in MiB):\n\n"
+  msg+="Recommendations:\n"
+  msg+="• 512 MiB: Minimum for basic usage\n"
+  msg+="• 1024 MiB: Good for most users (default)\n"
+  msg+="• 2048 MiB: Better performance\n"
+  msg+="• 4096 MiB: High performance systems\n"
+  msg+="• 8192 MiB: Maximum performance\n\n"
+  msg+="Note: More dbcache uses more RAM but speeds up initial sync."
 
-  local ram_info=""
-  if [ "$total_ram" -gt 0 ]; then
-    ram_info="\nIt seems your system has $total_ram MiB available.\n\n"
-  fi
-
-  local title="Config dbcache"
-  local msg_array=(
-    "The dbcache setting defines the maximum amount of memory (RAM) for bitcoind's database cache.\n\n"
-    "Bigger values make the initial sync faster by reducing the frequency of disk writes.\n"
-    "$ram_info"
-    "Enter the value of dbcache in MiB (default $default_ram MiB):"
-  )
-
-  local msg
-  msg=$(printf "%s" "${msg_array[@]}")
-
-  local answer
-  while true; do
-    answer=$(inputbox "$title" "$msg" "$(get_dbcache)")
-
-    if [ -z "$answer" ]; then # empty, keep previous value
-      answer=$(get_dbcache)
-      break
-    fi
-
-    if ! echo "$answer" | grep -qE "^[0-9]+$"; then # invalid, repeat
-      msgbox "Invalid input" "Please enter a number for dbcache."
-      continue
-    fi
-
-    answer="$(trim_zeros "$answer")"
-
-    if [ "$total_ram" -gt 0 ] && [ "$answer" -gt "$total_ram" ]; then # bigger than detected, ok if confirmed
-      local confirm_msg="Are you sure you want $answer MiB for dbcache?\nOnly $total_ram MiB was detected."
-      confirmbox "Value above detected RAM" "$confirm_msg" && break
-    elif [ "$answer" -ge "$default_ram" ]; then # ok value
-      break
+  local choice
+  choice=$(inputbox "Database Cache" "$msg" "$current_dbcache")
+  
+  if [ -n "$choice" ] && [[ "$choice" =~ ^[0-9]+$ ]]; then
+    # Validate the input is a reasonable number
+    if [ "$choice" -ge 512 ] && [ "$choice" -le 16384 ]; then
+      set_dbcache "$choice"
+      msgbox "Database Cache" "Database cache set to ${choice} MiB"
     else
-      local confirm_msg="Are you sure you want $answer MiB for dbcache?\nThe recommended minimum is $default_ram MiB."
-      confirmbox "Value below default" "$confirm_msg" && break # below default, ok if confirmed
+      msgbox "Invalid Input" "Please enter a value between 512 and 16384 MiB"
     fi
-  done
-
-  echo "$answer"
+  elif [ -n "$choice" ]; then
+    msgbox "Invalid Input" "Please enter a valid number"
+  fi
 }
 
 function read_dbcache() {
-  local dbcache
-  dbcache=$(input_dbcache)
-  set_dbcache "$dbcache"
+  menu_dbcache
 }

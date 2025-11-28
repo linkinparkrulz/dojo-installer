@@ -35,6 +35,14 @@ function generate_pass() {
 
 # Calculate height of box based on the number of lines in the message
 function calc_box_height() {
-  # TODO: make it 2 or 3 pre-defined sizes, like small|big
+  # local message=${1:-""}
+  # local option_count=${2:-0}
+
+  # local lines
+  # lines=$(echo "$message" | grep -o '\\n' | wc -l)
+  # lines=$((lines + option_count))
+
+  # local height=$((lines * 3 + 5))
+  # echo "$height"
   echo 20
 }

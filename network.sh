@@ -21,6 +21,8 @@ function menu_network() {
 function read_network() {
   local network
   if network=$(menu_network); then
+    # echo "setting network to $network"
     set_network "$network"
+    # echo "now the value is: $(get_network)"
   fi
 }

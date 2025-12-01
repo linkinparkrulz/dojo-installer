@@ -34,13 +34,12 @@ function validate_paynym() {
 function fetch_payment_code() {
   local paynym="$1"
   local payment_code
-  
+
   # Fetch the payment code from paynym.rs
-  payment_code=$(curl -s "https://paynym.rs/+$paynym" | \
-    grep -o '<div class="p-4 font-mono text-lg flex-1 overflow-hidden overflow-ellipsis"[^>]*>[^<]*' | \
-    sed 's/<[^>]*>//g' | \
-    head -1 | \
-    tr -d ' \t\n\r')
+  payment_code=$(curl -s -X POST "https://paynym.rs/api/v1/nym/?compact=true" --header "Content-Type: application/json" --data "{\"nym\": \"+$paynym\"}" | \
+    sed -n 's/.*"code": *"\([^"]*\)".*/\1/p' | \
+    head -n 1
+  )
   
   # Validate payment code format (should start with PM8T...)
   if [[ -n "$payment_code" && "$payment_code" =~ ^PM8T ]]; then
